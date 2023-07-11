@@ -1,0 +1,5 @@
+---
+- host: {{win_host}}
+  gather_facts: false    # to get details of managed host
+  become: yes            # to switch user
+  become_user: root      # name

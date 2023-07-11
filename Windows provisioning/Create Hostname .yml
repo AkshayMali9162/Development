@@ -1,0 +1,87 @@
+---
+- host: localhost
+  gather_facts: false
+  connection: local
+
+- include_vars:
+    ../Dependencies/region.yml
+    ../Dependencies/endpoint.yml
+
+- tasks:
+  
+  - block: 
+    
+    - name: set index value placeholder
+      set_fact:
+        next_index: nextIndex
+
+    - name: assign os type value           #w
+      set_fact:
+        ostype_name: "{{item.1}}"
+      loop:
+         - ['RHEL',l]
+         - ['Linux',l]
+         - ['Windows',w]
+         - ['Oracle',o]
+      when : input_os_name == "{{item.0}}"
+ 
+    - name: add region value                               #amr
+      set_fact:
+        region_value: {{item.region_small_value}}
+      loop: "{{regions}}"
+      when: item.region_name == input_region_name|lower
+
+    - name: add endpoint value                             #ae
+      set_fact:
+        endpoint_value: {{item.endpoint_value}}
+      loop: "{{endpoints}}"
+      when: item.endpoint_name == input_endpoint_name|lower
+ 
+    - name: add env value                                     #p
+      set_fact:
+        env_value: "{{ vra_env[0]|lower }}"
+      when: vra_env|lower == "dev" or vra_env|lower == "prod"
+
+    - name: add env value 
+      set_fact:
+        env_value: "t"
+      when: vra_env|lower == "test"
+
+    - name: concatenate variables                                 #amraewp
+      set_fact:
+        half_host_name: "{{region_value}}{{endpoint_value}}{{ostype_name}}{{env_value}}"     
+
+
+    - name : get last index values by hitting service broker
+      include: ../Dependencies/servicebroker.yml
+
+    - name: set the number of digits required
+      set_fact:
+        value_to_set: "%0{{noofdigits}}d"
+
+    - name: set unique code
+      set_fact:
+        unique_code: "{{ value_to_set| format(new_number|int) }}"
+
+    - name: set the full custom host name
+      set_fact:
+        fullhostname : "{{half_host_name}}{{unique_code}}"
+
+    - name: print the success message
+      debug:
+        msg : "playbooksuccess: this is the hostname : {{fullhostname}} :: playbookend "
+
+  - rescue:
+      - name: fail message
+        fail:
+          msg : "playbookExceptation : fail :: Custom name playbook failed :: playbookend"
+
+
+    
+
+###########################################ANSIBLE PLAYBOOK INPUTS###################################################################
+
+# input_os_name : Windows
+# input_region_name: us-east-1
+#input_endpoint_name:aws
+#vra_env:prod

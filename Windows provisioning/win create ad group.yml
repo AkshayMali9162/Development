@@ -1,0 +1,106 @@
+---
+- hosts: "{{ win_host }}"
+  gather_facts: false
+  vars_files:
+
+    - ../Credentials/AdCred/AdCred.yml
+
+  tasks:
+    - name: wait for connection
+      wait_for_connection:
+        timeout: 3600
+        sleep: 60
+
+       
+
+    - block:
+
+        - name: prep for when statement
+
+          set_fact:
+
+            regionTrim: "{{ domain.split('.') }}" 
+
+    - block:
+
+        - name: set domain amer
+
+          set_fact:
+
+            domainS: "AMER"
+
+          when: regionTrim[0]|lower == 'amer'
+
+        - name: set domain for emea
+
+          set_fact:
+
+            domainS: "EMEA"
+
+          when: regionTrim[0]|lower == 'emea'
+
+        - name: set domain for apac
+
+          set_fact:
+
+            domainS: "APAC"
+
+          when: regionTrim[0]|lower == 'apac'
+
+        - name: set groupNames
+
+          set_fact:
+
+            groupNames:
+
+              - "LA-{{ machineName | upper  }}-U"
+
+              - "LA-{{ machineName | upper  }}-SRV-U"
+
+      rescue:
+
+        - name: fail message
+
+          fail:
+
+            msg: "playbookException: Fact variables not set"
+
+       
+
+    - block:
+
+        - name: create group
+
+          community.windows.win_domain_group:
+
+            name: "{{ item }}"
+
+            state: present
+
+            ou: "ou=Server,ou=Groups,dc={{ domainS }},dc=example,dc=com"
+
+            domain_username: "{{ serverUsername_AnsModule }}"
+
+            domain_password: "{{ serverPassword }}"
+
+            domain_server: "{{ domain }}"
+
+            scope: universal
+
+          with_items: "{{ groupNames }}"
+
+      rescue:
+
+        - name: fail message
+
+          fail:
+
+            msg: "playbookException: AD Group could not be created"
+
+           
+
+    - name: success
+
+      debug:
+
+        msg: "playbookSuccess: AD Group and Jita group added to AD"

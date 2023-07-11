@@ -1,0 +1,33 @@
+---
+- host: localhost
+  gather_facts: yes
+  connection: local
+
+- tasks:
+  - name: include email protocol config details
+    include_vars: 
+      ../Dependencies/smtp details
+
+  - name: send email to the requestor
+    mail:
+      host: "{{ smtphost }}"
+      port: "{{smtpport}}"
+      username : "{{username}}"
+      password : "{{password}}"
+      from: "{{fromaddress}}"
+      to: "{{toaddress}}"
+      cc: "{{ccaddress}}"
+      subject: "{{subject}}"
+    regsiter: mail_output
+    until: mail_output is succeeded
+    retries: 5
+    delegate_to: localhost
+    
+
+
+################################################ ANSIBLE PLAYBOOK INPUTS ############################################################
+
+# body : "request to deployment completed successfully"
+# fromaddress : noreplay.com
+# to : user@example.com
+# subject : req submitted

@@ -1,0 +1,6 @@
+Service broker - catalog item 
+
+
+
+workflow :
+deployment req mail - anisble playbook

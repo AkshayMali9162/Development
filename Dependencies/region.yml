@@ -1,0 +1,5 @@
+---
+regions:
+- {"region_name":"us-east-1","region_cap_value": "AMER","region_small_value":"amr"}
+- {"region_name":"us-east-2","region_cap_value": "AMER","region_small_value":"amr"}
+- {"region_name":"ap-southeast-1","region_cap_value": "APAC","region_small_value":"asp"}

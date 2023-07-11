@@ -1,0 +1,7 @@
+---
+endpoints:
+- {"endpoint_name":"aws","enpoint_value":"ae"}
+- {"endpoint_name":"vmc","enpoint_value":"v"}
+- {"endpoint_name":"vsphere","enpoint_value":"v"}
+
+ 
