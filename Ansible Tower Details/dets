@@ -1,0 +1,160 @@
+
+wget https://www.python.org/ftp/python/3.11.4/Python-3.11.4tgz
+tar -xf Python-3.11.4.tgz
+cd Python-3.11.4
+
+
+yum install git gcc gcc-c++ ansible nodejs gettext device-mapper-persistent-data lvm2 bzip2 python3-pip
+1.AWX (Ansible Tower) - 
+    Instance Details : 
+        Platform : Amazon Linux (Inferred)
+        AMI ID : ami-0b9ecf71fe947bbdd
+        Platform details : Linux/UNI
+        Region : Asia Pacific (Mumbai)ap-south-1
+        Instance type : t2.micro
+        Ip : ip-172-31-45-110.ap-south-1.compute.internal
+        Auth : PPM
+        User Login as : ec2-user 
+            or
+        User Login as - :
+            user name : ansibleadmin
+            password : 91622129Am@&#
+    
+2.Create User : 
+    sudo adduser <username>
+    Set a password for the new user:
+    sudo passwd <username>
+    visudo - This command will open the sudoers file in the default text editor.
+    Locate the section that grants sudo privileges to users. It will look something like this:
+    ## Allow members of group sudo to execute any command
+    %sudo   ALL=(ALL:ALL) ALL
+    Add the following line below the existing line: ansibleadmin   ALL=(ALL:ALL) ALL
+
+3.Install Ansible :
+    Install python3 and pip if they are not already installed: : sudo yum install python3 python3-pip -y
+    Once the installation is complete, you can install ansible using pip : pip3 install ansible
+
+4 Switch user :
+    su  - <username>
+
+5 List Users :
+    cat /etc/passwd
+
+
+    Host  :localhost
+    username : akshay
+    password : 91622129
+    Postgresql port :5432
+    listerner : port 5433
+    Apache Port : 8080
+    opertaing sys username : postgres
+
+
+
+    Installation Directory: C:\Applications\Depen
+    Server Installation Directory: C:\Applications\Depen
+    Data Directory: C:\Applications\Depen\data
+    Database Port: 5432
+    Database Superuser: postgres
+    Operating System Account: NT AUTHORITY\NetworkService
+    Database Service: postgresql-x64-15
+    Command Line Tools Installation Directory: C:\Applications\Depen
+    pgAdmin4 Installation Directory: C:\Applications\Depen\pgAdmin 4
+    Stack Builder Installation Directory: C:\Applications\Depen
+    Installation Log: C:\Users\aksha\AppData\Local\Temp\install-postgresql.log
+
+
+
+
+
+    
+[database]
+
+[all:vars]
+admin_password='91622129Am@&#'
+
+pg_host=''
+pg_port=''
+
+pg_database='awx'
+pg_username='awx'
+pg_password=''
+pg_sslmode='prefer'  # set to 'verify-full' for client-side enforced SSL
+
+# Automation Hub Configuration
+#
+
+automationhub_admin_password=''
+
+automationhub_pg_host=''
+automationhub_pg_port=''
+
+automationhub_pg_database='automationhub'
+automationhub_pg_username='automationhub'
+automationhub_pg_password=''
+automationhub_pg_sslmode='prefer'
+
+# localectl set-locale LANG=en_US.UTF-8
+
+
+Replace <tar_file_url> with the actual URL of the Ansible Tower tar file. For example:
+
+shell
+Copy code
+wget https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
+Extract the contents of the tar file using the tar command:
+
+shell
+Copy code
+tar -xf ansible-tower-setup-latest.tar.gz
+This will create a directory containing the extracted files.
+
+Change into the extracted directory:
+
+shell
+Copy code
+cd ansible-tower-setup-<version>
+
+
+Locate the section that grants sudo privileges to users. It will look something like this:
+
+plaintext
+Copy code
+## Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+Add the following line below the existing line:
+
+plaintext
+Copy code
+ansibleadmin   ALL=(ALL:ALL) ALL
+This line grants sudo privileges to the "ansibleadmin" user.
+
+Save the changes and exit the editor.
+
+Verify the syntax of the sudoers file by running the following command:
+erify the syntax of the sudoers file by running the following command:
+
+shell
+Copy code
+visudo -c
+If there are no syntax errors, it will return the message "visudo: syntax ok".
+
+Exit the root shell:
+
+shell
+Copy code
+exit
+Logout from the SSH session and then log back in as the "ansibleadmin" user.
+
+Test the sudo access by running a command with sudo:
+
+shell
+Copy code
+sudo command_to_run
+
+
+
+
+/usr/bin/python
+export PATH=/usr/bin/python/python3/bin:$PATH
+ansible-playbook -i inventory .yml --user=ansibleadmin --become
