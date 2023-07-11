@@ -1,0 +1,135 @@
+---
+- hosts: "{{hostname }}"
+  gather_facts: false
+
+ 
+
+  tasks:
+
+ 
+
+  - block:
+
+ 
+
+    - name: akshay?
+
+      ansible.windows.win_powershell:
+
+        script: |
+
+                add-type @"
+
+                using System.Net;
+
+                using System.Security.Cryptography.X509Certificates;
+
+                public class TrustAllCertsPolicy : ICertificatePolicy {
+
+                    public bool CheckValidationResult(
+
+                        ServicePoint srvPoint, X509Certificate certificate,
+
+                        WebRequest request, int certificateProblem) {
+
+                            return true;
+
+                        }
+
+                }
+
+                "@
+
+                [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+
+                Invoke-WebRequest https://expired.badssl.com/ -UseBasicParsing
+
+                Invoke-WebRequest -Uri https://00/connector/RubrikBackupService.zip -OutFile "C:\RubrikBackupService.zip"
+
+      register: _status
+
+ 
+
+    - name: debug the status
+
+      debug:
+
+        msg: "{{_status}}"
+
+   
+
+    - name: unzip the rubrik file?
+
+      ansible.windows.win_powershell:
+
+        script: Expand-Archive -Path "C:\RubrikBackupService.zip" -DestinationPath "C:\RubrikBackupService"
+
+        error_action: stop
+
+      register: _status1
+
+ 
+
+    - name: debug the status
+
+      debug:
+
+        msg: "{{_status1}}"
+
+ 
+
+    - name: install the msi file?
+
+      ansible.windows.win_powershell:
+
+        script: Start-Process -FilePath "C:\RubrikBackupService\RubrikBackupService.msi" -ArgumentList "/qn" -Wait
+
+        error_action: stop
+
+      register: _status2
+
+ 
+
+    - name: debug the status
+
+      debug:
+
+        msg: "{{_status2}}"
+
+ 
+
+   
+
+    - name: Check if Service is running
+
+      win_service:
+
+        name: Rubrik Backup Service
+
+        state: started
+
+      register: _status3
+
+ 
+
+    - name: debug the status
+
+      debug:
+
+        msg: "{{_status3}}"
+
+ 
+
+   
+
+    rescue:
+
+ 
+
+     - name: failed
+
+       fail:
+
+         msg: "playbookException :  playbookEnd"
+
+

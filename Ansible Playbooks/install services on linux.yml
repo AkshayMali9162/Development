@@ -1,0 +1,31 @@
+---
+
+- hosts: "{{hostname }}"
+
+  become: yes
+
+  tasks:
+
+   - name: Run command on linux machine to download the zip file from url
+
+     shell: wget --no-check-certificate https://00/connector/rubrik-agent.x86_64.rpm -O /tmp/rubrik-agent.x86_64.rpm
+
+ 
+
+  #  - name: Run command on linux machine to unzip the file
+
+  #    command: rpm2cpio rubrik-agent.x86_64.rpm | cpio -idmv
+
+ 
+
+   - name: Run command on linux machine to install the rbs msi file
+
+     shell: cd /tmp; rpm -ivh rubrik-agent.x86_64.rpm
+
+     ignore_errors: True
+
+ 
+
+   - name: check running
+
+     shell: systemctl status rubrikagents.service
