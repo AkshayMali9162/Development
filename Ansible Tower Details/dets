@@ -43,7 +43,7 @@ yum install git gcc gcc-c++ ansible nodejs gettext device-mapper-persistent-data
 
     Host  :localhost
     username : akshay
-    password : 91622129
+    password : 
     Postgresql port :5432
     listerner : port 5433
     Apache Port : 8080
@@ -71,7 +71,7 @@ yum install git gcc gcc-c++ ansible nodejs gettext device-mapper-persistent-data
 [database]
 
 [all:vars]
-admin_password='91622129Am@&#'
+admin_password='@&#'
 
 pg_host=''
 pg_port=''
