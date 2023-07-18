@@ -17,8 +17,8 @@ yum install git gcc gcc-c++ ansible nodejs gettext device-mapper-persistent-data
         User Login as : ec2-user 
             or
         User Login as - :
-            user name : ansibleadmin
-            password : 91622129Am@&#
+            user name : 
+            password : 
     
 2.Create User : 
     sudo adduser <username>
