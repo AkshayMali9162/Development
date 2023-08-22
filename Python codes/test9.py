@@ -20,4 +20,5 @@ result ,email_data = read_msg.fetch(emailid,'(RFC822)')
 raw  = email_data[0][1]
 # print(raw)
 t = raw.decode("utf-8")
+
 print(t)
